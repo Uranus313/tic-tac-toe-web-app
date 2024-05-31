@@ -9,7 +9,7 @@ function App() {
   return (
     <>
       
-      <h1 style={{padding : "10px", borderRadius : "10px", color : 'white',textAlign: 'center'}}>Tic-Tac-Toe</h1>
+      
       <Link to={'/signupForm'} style={{backgroundColor : "beige",margin : "20px"}}>Start</Link>
       <Link to= {'/topScores'} style={{backgroundColor : "beige"}}>SCORES</Link>
     </>
