@@ -6,6 +6,7 @@ function PlayGround({player1name , player2name}){
     let [selected,setSelected] = useState([0,0,0,0,0,0,0,0,0]);
     let [winner,setWinner] = useState(null);
     let [isdone,setIsdone] = useState(false);
+    let [replay,setReplay] = useState(0);
     useEffect(() =>{console.log(selected);
         for(let i= 0;i<9;i+=3){
             if(selected[i] == selected[i+1] && selected[i+1] == selected[i+2] && selected[i] != 0){
@@ -44,8 +45,9 @@ function PlayGround({player1name , player2name}){
             </div>
             <p style={{color : "white"}}>{turn}</p>
             <button onClick={ () => {setTurn(turn+1); setIsdone(false)}}>raise turn</button>
+            <button onClick={() => {setIsdone(false);setReplay(replay+1);setSelected([0,0,0,0,0,0,0,0,0]);setWinner(null);setTurn(1);}}>Replay</button>
             <div style={{display: "flex",flexWrap: 'wrap',width : '500px', justifyContent: 'space-between' }}>
-            {selected.map((item,i) => <PlayButton turn={turn} isdone={isdone} setTurn = {() => setTurn(turn +1 )} setSelecter={(selector) => setSelected(selected.map((item2, j) => (j === i ? selector : item2)))}/>)}
+            {selected.map((item,i) => <PlayButton turn={turn} isdone={isdone} replay={replay} setTurn = {() => setTurn(turn +1 )} setSelecter={(selector) => setSelected(selected.map((item2, j) => (j === i ? selector : item2)))}/>)}
 
             </div>
         </div>
