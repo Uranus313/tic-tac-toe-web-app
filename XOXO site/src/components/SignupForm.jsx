@@ -1,14 +1,21 @@
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function SignupForm(){
     let [error,setError] = useState(null);
     const player1nameRef = useRef('');
     const player2nameRef = useRef('');
+    const navigate = useNavigate();
     function handleSubmit(event){
         event.preventDefault();
-        if(player1nameRef.current.value != '' & player2nameRef.current.value != ''  ){
+        if(player1nameRef.current.value.search('::') != -1 || player1nameRef.current.value.search('::') != -1){
+            setError("names shouldn't contain '::' ");
+            return;
+        }
+        if(player1nameRef.current.value != '' && player2nameRef.current.value != ''  ){
             console.log(player1nameRef.current.value);
             console.log(player2nameRef.current.value);
+            navigate(`/playGround/${player1nameRef.current.value + "::" + player2nameRef.current.value}`);
         }else{
             setError("player 1's and player 2's names shouldn't be empty");
         }

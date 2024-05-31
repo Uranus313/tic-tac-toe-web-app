@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import PlayButton from "./PlayButton";
+import { useParams } from "react-router-dom";
 
 function PlayGround({player1name , player2name}){
     let [turn,setTurn] = useState(1);
@@ -7,6 +8,9 @@ function PlayGround({player1name , player2name}){
     let [winner,setWinner] = useState(null);
     let [isdone,setIsdone] = useState(false);
     let [replay,setReplay] = useState(0);
+    let params = useParams();
+    [player1name,player2name] = params.names.split("::"); 
+    console.log(params.names);
     useEffect(() =>{console.log(selected);
         for(let i= 0;i<9;i+=3){
             if(selected[i] == selected[i+1] && selected[i+1] == selected[i+2] && selected[i] != 0){
