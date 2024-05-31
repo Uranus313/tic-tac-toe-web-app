@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import PlayGround from './PlayGround'
 import TopPlayers from './TopPlayers'
+import SignupForm from './SignupForm'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -13,6 +14,7 @@ function App() {
       <button>SCORES</button>
       <PlayGround player1name={"Mehrbod"} player2name={"Slim"}/>
       <TopPlayers />
+      <SignupForm />
     </>
   )
 }
