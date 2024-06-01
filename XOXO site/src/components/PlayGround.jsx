@@ -60,8 +60,10 @@ function PlayGround({player1name , player2name}){
                 
             </div>
             <p style={{color : "white"}}>{turn}</p>
+            {winner? null : <p style={{color : 'white'}}><span style={{color :(turn % 2 == 1)? 'blue' : 'red'}}>{(turn % 2 == 1)? player1name : player2name}</span>'s turn</p>}
+            
             {/* <button onClick={ () => {setTurn(turn+1); postResults("Arsam","efef")}}>raise turn</button> */}
-            <button onClick={() => {setIsdone(false);setReplay(replay+1);setSelected([0,0,0,0,0,0,0,0,0]);setWinner(null);setTurn(1);}}>Replay</button>
+            <button style={{backgroundColor: "orange",border: "none", borderRadius : '5px',padding: '10px 15px', cursor:'pointer'}} onClick={() => {setIsdone(false);setReplay(replay+1);setSelected([0,0,0,0,0,0,0,0,0]);setWinner(null);setTurn(1);}}>Replay</button>
             <div style={{display: "flex",flexWrap: 'wrap',width : '500px', justifyContent: 'space-between' }}>
             {selected.map((item,i) => <PlayButton turn={turn} isdone={isdone} replay={replay} setTurn = {() => setTurn(turn +1 )} setSelecter={(selector) => setSelected(selected.map((item2, j) => (j === i ? selector : item2)))}/>)}
 
