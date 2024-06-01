@@ -23,10 +23,10 @@ function SignupForm(){
     return (
         <form action="post" onSubmit={(event) => handleSubmit(event)} style={{display: "flex", alignItems:"center", flexDirection:'column',width: "100%", color: "white"}}>
             <h2>fill the form</h2>
-            {error? <p style={{color : 'red'}}>{error}</p> : null }
-            <input type="text" ref={player1nameRef} placeholder="player 1's name" style={{margin: '20px'}}/>
-            <input type="text" ref={player2nameRef} placeholder="player 2's name" style={{margin: '20px'}}/>
-            <button type="submit" style={{backgroundColor: "orange",border: "none", borderRadius : '10px'}}>start the game</button>
+            {error? <p style={{color : 'rgb(230, 18, 18)'}}>{error}</p> : null }
+            <input type="text" ref={player1nameRef} placeholder="player 1's name" style={{margin: '20px',padding: '4px 15px',borderRadius: '20px',outline:'none',border:'none'}}/>
+            <input type="text" ref={player2nameRef} placeholder="player 2's name" style={{margin: '20px',padding: '4px 15px',borderRadius: '20px',outline:'none',border:'none'}}/>
+            <button type="submit" style={{backgroundColor: "orange",border: "none", borderRadius : '5px',padding: '10px 15px', cursor:'pointer'}}>start the game</button>
 
         </form>
     )
