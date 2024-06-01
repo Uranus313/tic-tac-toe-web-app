@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import PlayButton from "./PlayButton";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import APIClient from "../connections/apiconnection";
 function postResults(winner,loser){
     const apiClient = new APIClient('users/changeScore');
@@ -15,6 +15,9 @@ function PlayGround({player1name , player2name}){
     let [replay,setReplay] = useState(0);
     let params = useParams();
     [player1name,player2name] = params.names.split("::"); 
+    if( player1name == undefined || player2name == undefined || player1name == '' || player2name == '' ){
+        return <Navigate to={'/signupForm'} />
+    }
     console.log(params.names);
     useEffect(() =>{console.log(selected);
         for(let i= 0;i<9;i+=3){
