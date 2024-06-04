@@ -8,8 +8,16 @@ import models,database,CRUD,schemas
 from fastapi.middleware.cors import CORSMiddleware
 
 # Base.metadata.create_all(engine)
-
-
+class Match:
+    def __init__(self,matchID,player1,player2):
+        self.matchID = matchID
+        self.player1 = player1
+        self.player2 = player2
+        self.plays = [0,0,0,0,0,0,0,0,0]
+        self.turn = 1
+waitingPlayers = []
+matches = List[Match]
+matchCounter = 0
 # player1 = User(name = 'akbar', score = 10)
 # with SessionLocal.begin() as session:
 #     session.add(player1)
@@ -70,7 +78,53 @@ async def add_user(user : schemas.UserCreate, db : Session = Depends(get_db)):
     else:
         new_user = CRUD.create_user(db,user)
         return new_user   
-     
+@app.post("/waitingUsers/")
+async def add_waiting_user(user : schemas.UserCreate):
+    if len(waitingPlayers) == 0: 
+        waitingPlayers.append(user.name)  
+        return {}  
+    else :
+        newMatch = Match(matchCounter,user.name,waitingPlayers[0])
+        matchCounter += 1
+        waitingPlayers.pop()
+
+        matches.append(newMatch)
+        return newMatch
+@app.get("/matchfound/{name}")
+async def get_match(name):
+    for match  in matches:
+        if(match.player1 == name or match.player2 == name):
+            return match
+    return {}     
+class Move():
+    def __init__(self,matchID,location,player):
+        self.matchID = matchID
+        self.location = location
+        self.player = player
+
+@app.post('/moves/')
+async def make_a_move(move : Move):
+    for match in matches:
+        if match.matchID == move.matchID:
+            match.plays[move.location] = move.player
+            match.turn += 1
+            return match
+    raise HTTPException(404,'match not found')        
+@app.get('/turn/{matchID}')
+async def get_turn(matchID):
+    for match in matches:
+        if match.matchID == matchID:
+            return match.turn
+    raise HTTPException(404,'match not found')        
+@app.delete('/matches/{matchID}')
+async def abandon_match(matchID):
+    for match in matches:
+        if match.matchID == matchID:
+            matches.remove(match)
+            return {'deleted' : True}
+    raise HTTPException(404,'match not found') 
+    
+
 # @app.post("/users/chs")
 # async def change_user_score(items : List[schemas.Item], db: Session = Depends(get_db)):
 
