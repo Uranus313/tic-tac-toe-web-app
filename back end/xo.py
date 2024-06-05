@@ -16,8 +16,9 @@ class Match:
         self.player2 = player2
         self.plays = [0,0,0,0,0,0,0,0,0]
         self.turn = 1
+        self.finished = False
 waitingPlayers = []
-matches = List[Match]
+matches = []
 matchCounter = 0
 # player1 = User(name = 'akbar', score = 10)
 # with SessionLocal.begin() as session:
@@ -80,12 +81,13 @@ async def add_user(user : schemas.UserCreate, db : Session = Depends(get_db)):
         new_user = CRUD.create_user(db,user)
         return new_user   
 @app.post("/waitingUsers/")
-async def add_waiting_user(user : schemas.UserCreate):
+async def add_waiting_user(name : str):
+    global matchCounter
     if len(waitingPlayers) == 0: 
-        waitingPlayers.append(user.name)  
+        waitingPlayers.append(name)  
         return {}  
     else :
-        newMatch = Match(matchCounter,user.name,waitingPlayers[0])
+        newMatch = Match(matchCounter,name,waitingPlayers[0])
         matchCounter += 1
         waitingPlayers.pop()
 
@@ -107,7 +109,7 @@ class Move(BaseModel):
     location : int
     player : int
 
-@app.post('/moves/')
+@app.put('/moves/')
 async def make_a_move(move : Move):
     for match in matches:
         if match.matchID == move.matchID:
@@ -115,12 +117,19 @@ async def make_a_move(move : Move):
             match.turn += 1
             return match
     raise HTTPException(404,'match not found')        
-@app.get('/turn/{matchID}')
-async def get_turn(matchID):
+@app.get('/matches/{matchID}')
+async def get_match(matchID):
     for match in matches:
         if match.matchID == matchID:
-            return match.turn
-    raise HTTPException(404,'match not found')        
+            return match
+    raise HTTPException(404,'match not found')      
+@app.put('/matches/{matchID}')
+async def get_match(matchID,finished : bool):
+    for match in matches:
+        if match.matchID == matchID:
+            match.finished = finished
+            return match
+    raise HTTPException(404,'match not found')    
 @app.delete('/matches/{matchID}')
 async def abandon_match(matchID):
     for match in matches:
