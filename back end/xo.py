@@ -1,6 +1,7 @@
 import time
 from typing import List
 from fastapi import Depends, FastAPI, HTTPException
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 import models,database,CRUD,schemas
@@ -96,11 +97,15 @@ async def get_match(name):
         if(match.player1 == name or match.player2 == name):
             return match
     return {}     
-class Move():
+class Move2():
     def __init__(self,matchID,location,player):
         self.matchID = matchID
         self.location = location
         self.player = player
+class Move(BaseModel):
+    matchID : int
+    location : int
+    player : int
 
 @app.post('/moves/')
 async def make_a_move(move : Move):
