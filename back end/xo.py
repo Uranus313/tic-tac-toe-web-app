@@ -16,7 +16,8 @@ class Match:
         self.player2 = player2
         self.plays = [0,0,0,0,0,0,0,0,0]
         self.turn = 1
-        self.finished = False
+        # self.finished = False
+        self.winner = None
 waitingPlayers = []
 matches = []
 matchCounter = 0
@@ -109,7 +110,7 @@ class Move(BaseModel):
     location : int
     player : int
 
-@app.put('/moves/')
+@app.post('/moves/')
 async def make_a_move(move : Move):
     for match in matches:
         if match.matchID == move.matchID:
@@ -123,13 +124,13 @@ async def get_match(matchID):
         if match.matchID == matchID:
             return match
     raise HTTPException(404,'match not found')      
-@app.put('/matches/{matchID}')
-async def get_match(matchID,finished : bool):
-    for match in matches:
-        if match.matchID == matchID:
-            match.finished = finished
-            return match
-    raise HTTPException(404,'match not found')    
+# @app.put('/matches/{matchID}')
+# async def get_match(matchID,finished : bool):
+#     for match in matches:
+#         if match.matchID == matchID:
+#             match.finished = finished
+#             return match
+#     raise HTTPException(404,'match not found')    
 @app.delete('/matches/{matchID}')
 async def abandon_match(matchID):
     for match in matches:
