@@ -5,6 +5,9 @@ import PlayGround from "../components/PlayGround";
 import SignupForm from "../components/SignupForm";
 import Layout from "../components/HeaderLayout";
 import FooterLayout from "../components/FooterLayout";
+import MultiplayerSignupForm from "../components/MultiplayerSignupForm";
+import WaitingPage from "../components/WaitingPage";
+import MultiPlayGround from "../components/MultiPlayGround";
 
 const router = createBrowserRouter([
     {path : '/',
@@ -13,7 +16,10 @@ const router = createBrowserRouter([
                 children:[{path : '',element: <App/>},
                             {path: 'signupForm',element: <SignupForm />}]
     },{path : 'topScores',element: <TopPlayers />},
-    {path : 'playGround/:names',element: <PlayGround />}],
+    {path : 'playGround/:names',element: <PlayGround />},
+    {path: 'MultiplayerSignupForm',element: <MultiplayerSignupForm />},
+    {path : "WaitingPage/:name",element: <WaitingPage />},
+    {path : "MultiPlayGround",element: <MultiPlayGround />}]
     // children: [{path : '',element: <App/>},
     // {path : 'signupForm',element: <SignupForm/>},
     // {path : 'topScores',element: <TopPlayers />},

@@ -11,6 +11,8 @@ function App() {
       
       
       <Link to={'/signupForm'} style={{backgroundColor : "rgb(186, 88, 73)",margin : "20px",padding:"10px 20px 10px 20px",textDecoration: 'none', borderRadius: '20px'}}>Local 2 player</Link>
+      <Link to={'/MultiplayerSignupForm'} style={{backgroundColor : "rgb(186, 88, 73)",margin : "20px",padding:"10px 20px 10px 20px",textDecoration: 'none', borderRadius: '20px'}}>Local 2 player</Link>
+
       <Link to= {'/topScores'} style={{backgroundColor : "rgb(186, 88, 73)",textDecoration: 'none',padding:"10px 20px 10px 20px", borderRadius: '20px'}}>SCORES</Link>
     </div>
   )
