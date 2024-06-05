@@ -20,7 +20,11 @@ function MultiPlayGround(){
     let opponetName;
     let player1name;
     let player2name;
-
+    if(!data){
+        return (<div>
+                    <p>game is loading</p>
+                </div>)
+    }
     if (data.player1 == username){
         playerNumber = 1;
         opponetName = data.player2;

@@ -63,7 +63,34 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+def findwinner(moves):
+    for i in range(0,9,3):
+            if(moves[i] == moves[i+1] and moves[i+1] == moves[i+2] and moves[i] != 0):
+                if moves[i] == 1:
+                    return 1
+                else : 
+                    return 2    
+                
+            
+    for i in range(0,3) :
+            if(moves[i] == moves[i+3] and moves[i+3] == moves[i+6] and moves[i] != 0):
+                if moves[i] == 1:
+                    return 1
+                else : 
+                    return 2   
+   
+    if(moves[0] == moves[4] and moves[4] == moves[8] and moves[0] != 0):
+            if moves[i] == 1:
+                    return 1
+            else : 
+                    return 2   
 
+    if(moves[2] == moves[4] and moves[4] == moves[6] and moves[2] != 0):
+            if moves[i] == 1:
+                    return 1
+            else : 
+                    return 2   
+    return 0
 @app.get("/users/", response_model=list[schemas.User])
 async def get_all_users(db: Session = Depends(get_db)):
     return CRUD.get_users(db)
@@ -116,6 +143,9 @@ async def make_a_move(move : Move):
         if match.matchID == move.matchID:
             match.plays[move.location] = move.player
             match.turn += 1
+            winner = findwinner(match.plays)
+            if (winner != 0):
+                match.winner = winner
             return match
     raise HTTPException(404,'match not found')        
 @app.get('/matches/{matchID}')
