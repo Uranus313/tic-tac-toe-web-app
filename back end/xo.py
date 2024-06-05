@@ -116,17 +116,19 @@ async def add_waiting_user(name : str):
         return {}  
     else :
         newMatch = Match(matchCounter,name,waitingPlayers[0])
-        matchCounter += 1
         waitingPlayers.pop()
-
+        print("test")
         matches.append(newMatch)
+        matchCounter += 1
+
         return newMatch
 @app.get("/matchfound/{name}")
 async def get_match(name):
     for match  in matches:
         if(match.player1 == name or match.player2 == name):
             return match
-    return {}     
+    return None       
+    
 class Move2():
     def __init__(self,matchID,location,player):
         self.matchID = matchID
@@ -144,14 +146,19 @@ async def make_a_move(move : Move):
             match.plays[move.location] = move.player
             match.turn += 1
             winner = findwinner(match.plays)
-            if (winner != 0):
-                match.winner = winner
+            if (winner == 1):
+                match.winner = match.player1
+            elif (winner == 2):
+                match.winner = match.player2    
+            print(match.plays)    
             return match
     raise HTTPException(404,'match not found')        
 @app.get('/matches/{matchID}')
 async def get_match(matchID):
+    print("tested")
     for match in matches:
-        if match.matchID == matchID:
+        print(match.matchID)
+        if match.matchID == int(matchID):
             return match
     raise HTTPException(404,'match not found')      
 # @app.put('/matches/{matchID}')
@@ -164,7 +171,7 @@ async def get_match(matchID):
 @app.delete('/matches/{matchID}')
 async def abandon_match(matchID):
     for match in matches:
-        if match.matchID == matchID:
+        if match.matchID == int(matchID):
             matches.remove(match)
             return {'deleted' : True}
     raise HTTPException(404,'match not found') 

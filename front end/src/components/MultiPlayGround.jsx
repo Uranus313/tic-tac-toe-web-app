@@ -1,10 +1,21 @@
 import { useParams,Navigate,useSearchParams } from "react-router-dom";
 import APIClient from "../connections/apiconnection";
+import useGetMatch from "../hooks/useGetMatch";
+import { useEffect, useState } from "react";
+import PlayButton from "./PlayButton";
 function make_a_move(matchID,location,player){
+    console.log("trying to post");
     const apiClient = new APIClient('moves/');
     apiClient.post({matchID : matchID, location : location, player : player });
 }
-
+function getText(number){
+    if(number == 1){
+        return 'X';
+    }else if(number ==2){
+        return 'O';
+    }
+    return null;
+}
 
 
 function MultiPlayGround(){
@@ -37,25 +48,45 @@ function MultiPlayGround(){
         player1name = opponetName;
 
     }
-    let isYourTurn;
-    if(data.turn % 1 == 1 ){
+    // let [turn,setTurn] = useState(data.turn);
+
+    let [isYourTurn,setIsYourTurn]= useState();
+    let [winner,setWinner] = useState(null);
+    useEffect(() => {
+        console.log(data.turn % 1)
+        if(data.turn % 2 == 1 ){
+
         if (playerNumber == 1){
-            isYourTurn = true;
+            setIsYourTurn ( true);
+            console.log(1000)
         }else{
-            isYourTurn = false;
+            setIsYourTurn ( false);
+            console.log(2000)
+
         }
     }else{
         if (playerNumber == 1){
-            isYourTurn = false;
+            setIsYourTurn ( false);
+            console.log(3000)
+
         }else{
-            isYourTurn = true;
+            setIsYourTurn ( true);
+            console.log(4000)
+
         }
     }
-    let winner = null;
     if (data.winner){
-        winner = data.winner;
+        setWinner(data.winner);
+        setIsYourTurn(false);
     }
-    // let [turn,setTurn] = useState(1);
+    console.log("effect")},[data])
+    
+    console.log(username)
+    console.log(isYourTurn)
+    console.log(playerNumber)
+    // console.log(turn)
+ 
+    
     // let [selected,setSelected] = useState([0,0,0,0,0,0,0,0,0]);
     // let [winner,setWinner] = useState(null);
     // let [isdone,setIsdone] = useState(false);
@@ -63,35 +94,22 @@ function MultiPlayGround(){
     return (
         <div style={{alignItems: "center",display: 'flex', flexDirection : "column",width : '100%'}}>
             <div style={{display: "flex", justifyContent: "space-between", color : "white", width : '100%'}}>
-                {() => {
-                    if (playerNumber == 1){
-                        return(
-                            <>
-                            <p>{opponetName + " is : O"}</p>
-                            <p>{winner ? `The Winner is ${winner}` : null}</p>
-                            <p>{username + " is : X"}</p>
-                            </>
-                        );
-                    }else{
-                        return(
-                            <>
-                            <p>{username + " is : O"}</p>
-                            <p>{winner ? `The Winner is ${winner}` : null}</p>
-                            <p>{opponetName + " is : X"}</p>
-                            </>
-                        );
-                    }
-                }}
+
+                
+                    <p>{player1name + " is : O"}</p>
+                    <p>{winner ? `The Winner is ${winner}` : null}</p>
+                    <p>{player2name + " is : X"}</p>
+                
                 
                 
             </div>
-            <p style={{color : "white"}}>{turn}</p>
-            {winner? null : <p style={{color : 'white'}}><span style={{color :(turn % 2 == 1)? 'blue' : 'red'}}>{(turn % 2 == 1)? player1name : player2name}</span>'s turn</p>}
+            <p style={{color : "white"}}>{data.turn}</p>
+            {winner? null : <p style={{color : 'white'}}><span style={{color :(data.turn % 2 == 1)? 'blue' : 'red'}}>{(data.turn % 2 == 1)? player1name : player2name}</span>'s turn</p>}
             
             {/* <button onClick={ () => {setTurn(turn+1); postResults("Arsam","efef")}}>raise turn</button> */}
             {/* <button style={{backgroundColor: "orange",border: "none", borderRadius : '5px',padding: '10px 15px', cursor:'pointer'}} onClick={() => {setIsdone(false);setReplay(replay+1);setSelected([0,0,0,0,0,0,0,0,0]);setWinner(null);setTurn(1);}}>Replay</button> */}
             <div style={{display: "flex",flexWrap: 'wrap',width : '500px', justifyContent: 'space-between' }}>
-            {selected.map((item,i) => <PlayButton turn={data.turn} isdone={!isYourTurn} replay={null} setTurn = {() => {isYourTurn = false}} setSelecter={(selector) => make_a_move(matchID,i,selector)}/>)}
+            {data.plays.map((item,i) => <PlayButton turn={data.turn} isdone={item == 0?!isYourTurn: true} player={item}  setTurn = {() => {isYourTurn = false;}} setSelecter={(selector) => make_a_move(matchID,i,selector)}/>)}
 
             </div>
         </div>

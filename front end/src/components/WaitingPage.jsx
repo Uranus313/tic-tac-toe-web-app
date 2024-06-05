@@ -9,9 +9,10 @@ function WaitingPage(){
         return <Navigate to={'/MultiplayerSignupForm'} />
     }
     let {data,error,isLoading} = useGetMatch(params.name,null);
+    console.log(data);
     if(data){
         console.log('hello')
-        return <Navigate to={`/MultiPlayGround/?ID=${data.matchID},name=${params.name}`} />
+        return <Navigate to={`/MultiPlayGround/?ID=${data.matchID}&name=${params.name}`} />
     }else{
         return (
             <div>
