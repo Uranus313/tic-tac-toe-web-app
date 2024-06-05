@@ -63,6 +63,24 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+def saveResults(match : Match,db):
+    loserName = ''
+    if (match.winner == match.player1):
+        loserName = match.player2
+    else:
+        loserName = match.player1    
+    past_user = CRUD.get_user(db, match.winner)
+    if past_user:
+        CRUD.change_user_score(db, match.winner, 1)
+    else:    
+        user = models.User(match.winner, score=1)
+        CRUD.create_user(db, user=user)
+    past_user = CRUD.get_user(db, loserName)
+    if past_user:
+        CRUD.change_user_score(db, loserName, -1)
+    else:    
+        user = models.User(loserName, score=0)
+        CRUD.create_user(db, user=user)
 def findwinner(moves):
     for i in range(0,9,3):
             if(moves[i] == moves[i+1] and moves[i+1] == moves[i+2] and moves[i] != 0):
